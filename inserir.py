@@ -36,7 +36,7 @@ def create_contact():
 
     
     if nome and cnpj and natureza and descricao and qualificacao and capital and codigo_porte and porte and ente:
-        cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?,?,?,?,?,?,?,?,?)", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
+        cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?,?,?,?,?,?,?,?,?)", (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         entry_nome.delete(0, tk.END)
@@ -70,8 +70,8 @@ def update_contact():
     codigo_porte = entry_codigo_porte.get()
     porte = entry_porte.get()
     ente = entry_ente.get()
-    if id and nome and cnpj and natureza and descricao and qualificacao and capital and codigo_porte and porte and ente:
-        cursor.execute("UPDATE pessoas SET nome = ?, telefone = ? WHERE id = ?", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
+    if  nome and cnpj and capital :
+        cursor.execute("UPDATE pessoas SET nome = ?, natureza = ?, descricao = ?, qualificacao = ?, capital = ?, codigo_porte = ?, porte = ?, ente = ? WHERE cnpj = ?", (nome,natureza,descricao,qualificacao,capital,codigo_porte,porte,ente,cnpj))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         entry_nome.delete(0, tk.END)
@@ -90,12 +90,12 @@ def update_contact():
 def delete_contact():
     cnpj = entry_cnpj.get()
     if id:
-        cursor.execute("DELETE FROM pessoas WHERE id = ?", (cnpj,))
+        cursor.execute("DELETE FROM pessoas WHERE cnpj = ?", (cnpj,))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         read_contacts()
     else:
-        messagebox.showwarning("Erro", "Por favor, insira o ID do contato a ser excluído.")
+        messagebox.showwarning("Erro", "Por favor, insira o cnpj do contato a ser excluído.")
 
 # Configuração inicial
 root = tk.Tk()
@@ -110,7 +110,7 @@ create_table()
 
 # Widgets
 label_cnpj = tk.Label(root, text="CNPJ:")
-label_nome = tk.Label(root, text="CNPJ:")
+label_nome = tk.Label(root, text="Nome:")
 label_natureza = tk.Label(root, text="Natureza:")
 label_descricao = tk.Label(root, text="Descrição:")
 label_qualificacao = tk.Label(root, text="Qualificação:")
