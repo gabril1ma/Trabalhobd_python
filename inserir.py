@@ -2,7 +2,7 @@ import tkinter as tk
 import sqlite3
 from tkinter import messagebox
 
-# Função para criar a tabela no banco de dados
+
 def create_table():
     
     cursor.execute('''
@@ -22,8 +22,8 @@ def create_table():
     ''')
     conn.commit()
 
-# Função para criar um novo contato
-def create_contact():
+
+def create_empresa():
     nome = entry_nome.get()
     cnpj = entry_cnpj.get()
     natureza = entry_natureza.get()
@@ -47,20 +47,20 @@ def create_contact():
         entry_codigo_porte.delete(0, tk.END)
         entry_porte.delete(0, tk.END)
         entry_ente.delete(0, tk.END)
-        read_contacts()
+        read_empresas()
     else:
         messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
 
-# Função para ler todos os contatos
-def read_contacts():
+
+def read_empresas():
     cursor.execute("SELECT * FROM pessoas")
     rows = cursor.fetchall()
     text.delete(1.0, tk.END)
     for row in rows:
-        text.insert(tk.END, f"{row[0]}. {row[1]} - {row[2]} - {row[3]} - {row[4]} - {row[5]} - {row[6]} -{row[7]}\n")
+        text.insert(tk.END, f"{row[0]} - {row[1]} - {row[2]} - {row[3]} - {row[4]} - {row[5]} - {row[6]} - {row[7]}\n")
 
-# Função para atualizar um contato
-def update_contact():
+
+def update_empresa():
     nome = entry_nome.get()
     cnpj = entry_cnpj.get()
     natureza = entry_natureza.get()
@@ -82,33 +82,33 @@ def update_contact():
         entry_codigo_porte.delete(0, tk.END)
         entry_porte.delete(0, tk.END)
         entry_ente.delete(0, tk.END)
-        read_contacts()
+        read_empresas()
     else:
         messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
 
-# Função para excluir um contato
-def delete_contact():
+
+def delete_empresa():
     cnpj = entry_cnpj.get()
-    if id:
+    if cnpj:
         cursor.execute("DELETE FROM pessoas WHERE cnpj = ?", (cnpj,))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
-        read_contacts()
+        read_empresas()
     else:
         messagebox.showwarning("Erro", "Por favor, insira o cnpj do contato a ser excluído.")
 
-# Configuração inicial
-root = tk.Tk()
-root.title("CRUD com SQLite")
 
-# Conexão com o banco de dados
+root = tk.Tk()
+root.title("Listagem empresas")
+
+
 conn = sqlite3.connect("meu_banco.db")
 cursor = conn.cursor()
 
-# Criação da tabela (se não existir)
+
 create_table()
 
-# Widgets
+
 label_cnpj = tk.Label(root, text="CNPJ:")
 label_nome = tk.Label(root, text="Nome:")
 label_natureza = tk.Label(root, text="Natureza:")
@@ -129,13 +129,13 @@ entry_porte = tk.Entry(root)
 entry_ente = tk.Entry(root)
 entry_telefone = tk.Entry(root)
 entry_id = tk.Entry(root)
-text = tk.Text(root, height=10, width=120, pady=4)
-create_button = tk.Button(root, text="Criar Contato", command=create_contact)
-read_button = tk.Button(root, text="Listar Contatos", command=read_contacts)
-update_button = tk.Button(root, text="Atualizar Contato", command=update_contact)
-delete_button = tk.Button(root, text="Excluir Contato", command=delete_contact)
+text = tk.Text(root, height=10, width=125, pady=4)
+create_button = tk.Button(root, text="Criar Contato", command=create_empresa)
+read_button = tk.Button(root, text="Listar Contatos", command=read_empresas)
+update_button = tk.Button(root, text="Atualizar Contato", command=update_empresa)
+delete_button = tk.Button(root, text="Excluir Contato", command=delete_empresa)
 
-# Posicionamento dos widgets
+
 label_cnpj.grid(row=0, column=0)
 label_nome.grid(row=0, column=2)
 label_natureza.grid(row=0, column=4)
@@ -165,5 +165,5 @@ delete_button.grid(row=1, column=3)
 
 root.mainloop()
 
-# Fechando a conexão com o banco de dados
+
 conn.close()

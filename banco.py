@@ -57,24 +57,22 @@ try:
 
   cursor = conexao.cursor()
 
-#  cursor.execute('''
-#    CREATE TABLE pessoas(
-#      cnpj INTEGER PRIMARY KEY UNIQUE,
-#      nome TEXT,
-#      natureza INTEGER,
-#      descricao TEXT,
-#      qualificacao INTEGER,
-#      capital INTEGER,
-#      codigo_porte INTEGER,
-#      porte TEXT,
-#      ente INTEGER
-#
-#    )
+  cursor.execute('''
+    CREATE TABLE IF NOT EXISTS pessoas(
+      cnpj INTEGER PRIMARY KEY UNIQUE,
+      nome TEXT,
+      natureza INTEGER,
+      descricao TEXT,
+      qualificacao INTEGER,
+      capital INTEGER,
+      codigo_porte INTEGER,
+      porte TEXT,
+      ente INTEGER
 
-#''')
+    )
 
-#  cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?,?,?,?,?,?,?,?,?)", lista_atualizada)
-#  cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", lista_de_listas)
+''')
+
 
   for i in lista_de_listas:
     cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", i)
