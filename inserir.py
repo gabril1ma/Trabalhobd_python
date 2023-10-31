@@ -4,12 +4,21 @@ from tkinter import messagebox
 
 # Função para criar a tabela no banco de dados
 def create_table():
+    
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS contatos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        CREATE TABLE IF NOT EXISTS pessoas (
+            cnpj INTEGER PRIMARY KEY UNIQUE,
             nome TEXT,
-            telefone TEXT
+            natureza INTEGER,
+            descricao TEXT,
+            qualificacao INTEGER,
+            capital INTEGER,
+            codigo_porte INTEGER,
+            porte TEXT,
+            ente INTEGER
+
         )
+
     ''')
     conn.commit()
 
@@ -27,7 +36,7 @@ def create_contact():
 
     
     if nome and cnpj and natureza and descricao and qualificacao and capital and codigo_porte and porte and ente:
-        cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente) VALUES (?,?,?,?,?,?,?,?,?)", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
+        cursor.execute("INSERT INTO pessoas (cnpj, nome, natureza, descricao, qualificacao, capital, codigo_porte, porte, ente) VALUES (?,?,?,?,?,?,?,?,?)", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         entry_nome.delete(0, tk.END)
@@ -48,7 +57,7 @@ def read_contacts():
     rows = cursor.fetchall()
     text.delete(1.0, tk.END)
     for row in rows:
-        text.insert(tk.END, f"{row[0]}. {row[1]} - {row[2]}\n")
+        text.insert(tk.END, f"{row[0]}. {row[1]} - {row[2]} - {row[3]} - {row[4]} - {row[5]} - {row[6]} -{row[7]}\n")
 
 # Função para atualizar um contato
 def update_contact():
@@ -62,7 +71,7 @@ def update_contact():
     porte = entry_porte.get()
     ente = entry_ente.get()
     if id and nome and cnpj and natureza and descricao and qualificacao and capital and codigo_porte and porte and ente:
-        cursor.execute("UPDATE contatos SET nome = ?, telefone = ? WHERE id = ?", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
+        cursor.execute("UPDATE pessoas SET nome = ?, telefone = ? WHERE id = ?", (cnpj, nome, natureza, descricao, qualificacao, capital, capital, codigo_porte, porte, ente))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         entry_nome.delete(0, tk.END)
@@ -81,7 +90,7 @@ def update_contact():
 def delete_contact():
     cnpj = entry_cnpj.get()
     if id:
-        cursor.execute("DELETE FROM contatos WHERE id = ?", (cnpj,))
+        cursor.execute("DELETE FROM pessoas WHERE id = ?", (cnpj,))
         conn.commit()
         entry_cnpj.delete(0, tk.END)
         read_contacts()
@@ -100,8 +109,8 @@ cursor = conn.cursor()
 create_table()
 
 # Widgets
-label_nome = tk.Label(root, text="Nome:")
 label_cnpj = tk.Label(root, text="CNPJ:")
+label_nome = tk.Label(root, text="CNPJ:")
 label_natureza = tk.Label(root, text="Natureza:")
 label_descricao = tk.Label(root, text="Descrição:")
 label_qualificacao = tk.Label(root, text="Qualificação:")
@@ -109,8 +118,8 @@ label_capital = tk.Label(root, text="Capital:")
 label_codigo_porte = tk.Label(root, text="Código Porte:")
 label_porte = tk.Label(root, text="Porte:")
 label_ente = tk.Label(root, text="Ente:")
-entry_nome = tk.Entry(root)
 entry_cnpj = tk.Entry(root)
+entry_nome = tk.Entry(root)
 entry_natureza = tk.Entry(root)
 entry_descricao = tk.Entry(root)
 entry_qualificacao = tk.Entry(root)
@@ -120,15 +129,15 @@ entry_porte = tk.Entry(root)
 entry_ente = tk.Entry(root)
 entry_telefone = tk.Entry(root)
 entry_id = tk.Entry(root)
-text = tk.Text(root, height=10, width=40)
+text = tk.Text(root, height=10, width=120, pady=4)
 create_button = tk.Button(root, text="Criar Contato", command=create_contact)
 read_button = tk.Button(root, text="Listar Contatos", command=read_contacts)
 update_button = tk.Button(root, text="Atualizar Contato", command=update_contact)
 delete_button = tk.Button(root, text="Excluir Contato", command=delete_contact)
 
 # Posicionamento dos widgets
-label_nome.grid(row=0, column=0)
-label_cnpj.grid(row=0, column=2)
+label_cnpj.grid(row=0, column=0)
+label_nome.grid(row=0, column=2)
 label_natureza.grid(row=0, column=4)
 label_descricao.grid(row=0, column=6)
 label_qualificacao.grid(row=0, column=8)
@@ -137,19 +146,19 @@ label_codigo_porte.grid(row=0, column=12)
 label_porte.grid(row=0, column=14)
 label_ente.grid(row=0, column=16)
 
-entry_nome.grid(row=0, column=1)
-entry_cnpj.grid(row=0, column=3)
+entry_cnpj.grid(row=0, column=1)
+entry_nome.grid(row=0, column=3)
 entry_natureza.grid(row=0, column=5)
 entry_descricao.grid(row=0, column=7)
 entry_qualificacao.grid(row=0, column=9)
 entry_capital.grid(row=0, column=11)
 entry_codigo_porte.grid(row=0, column=13)
 entry_porte.grid(row=0, column=15)
-entry_ente.grid(row=0, column=17)
+entry_ente.grid(row=0, column=17, padx=10)
 
 
-text.grid(row=4, column=0, columnspan=4)
-create_button.grid(row=1, column=0)
+text.grid(row=4, column=0, columnspan=20)
+create_button.grid(row=1, column=0, pady=10)
 read_button.grid(row=1, column=1)
 update_button.grid(row=1, column=2)
 delete_button.grid(row=1, column=3)
